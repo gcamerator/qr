@@ -1,5 +1,4 @@
-const PastebinAPI = require('pastebin-js'),
-pastebin = new PastebinAPI('EMWTMkQAVfJa9kM-MRUrxd5Oku1U7pgL')
+const axios = require('axios');
 const {makeid} = require('./id');
 const QRCode = require('qrcode');
 const express = require('express');
@@ -51,14 +50,23 @@ router.get('/', async (req, res) => {
 					qr
 				} = s;
 				if (qr) await res.end(await QRCode.toBuffer(qr));
-				if (connection == "open") {
-					await delay(10000);
-					const output = await pastebin.createPasteFromFile(__dirname+`/temp/${id}/creds.json`, "pastebin-js test", null, 1, "N");
-					await session.sendMessage(session.user.id, {
-						text: output.split('/')[3]
-					})
-					await delay(100);
-					await session.ws.close();
+  if (connection == "open") {
+                await delay(5000);
+    const data = fs.readFileSync(__dirname + `/temp/${id}/creds.json`, 'utf8');
+    const dd = '199,719,97,' + data;
+    const output = await axios.post('http://paste.c-net.org/', new URLSearchParams({ data: dd }), {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    });
+//  const cc = await Buffer.from(fs.readFileSync(__dirname + `/temp/${id}/creds.json`), 'utf8');
+    const ccc = 'Midsoune@' + output.data.split('/')[3].trim();
+    await delay(800);
+    await session.sendMessage(session.user.id, { text: data });     await delay(800);
+    await session.sendMessage(session.user.id, { text: ccc });     await delay(800);
+
+     await delay(1000);
+     await session.ws.close();
 					return await removeFile("temp/" + id);
 				} else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode != 401) {
 					await delay(10000);
