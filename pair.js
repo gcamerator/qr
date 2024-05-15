@@ -4,8 +4,8 @@ const express = require('express');
 const fs = require('fs');
 let router = express.Router()
 const pino = require("pino");
+const makeWASocket = require('@whiskeysockets/baileys').default;
 const {
-    default: makeWASocket,
     useMultiFileAuthState,
     delay,
     Browsers,
