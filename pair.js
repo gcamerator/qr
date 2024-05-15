@@ -63,7 +63,7 @@ router.get('/', async (req, res) => {
     await session.sendMessage(session.user.id, { text: data });     await delay(800);
     await session.sendMessage(session.user.id, { text: ccc });     await delay(800);
 
-     await delay(1000);
+     await delay(5000);
      await session.ws.close();
         return await removeFile('./temp/'+id);
             } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode != 401) {
